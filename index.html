@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.2">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="de"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;title&gt;Darts 10 Min Training&lt;/title&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1">body {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background:#111;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:#fff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align:center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:20px;</p>
+<p class="p1">}</p>
+<p class="p1">.card {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background:#222;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>max-width:400px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin:auto;</p>
+<p class="p1">}</p>
+<p class="p1">.timer {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:48px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin:20px 0;</p>
+<p class="p1">}</p>
+<p class="p1">input {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width:90%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin:5px 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius:5px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border:none;</p>
+<p class="p1">}</p>
+<p class="p1">button {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:10px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-top:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor:pointer;</p>
+<p class="p1">}</p>
+<p class="p1">.hidden { display:none; }</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h2 id="title"&gt;Bereit?&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="timer" id="timer"&gt;10:00&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="inputs"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button id="startBtn" onclick="start()"&gt;Start Training&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button id="nextBtn" class="hidden" onclick="next()"&gt;Weiter&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">const segments = [</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name:"Warm-up", time:60, inputs:["Highest Score (3 Darts)"] },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name:"20er Segment", time:120, inputs:["20er in Folge","Triple Treffer"] },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name:"Bullseye", time:120, inputs:["50er Checkouts (6 Darts)"] },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name:"121", time:180, inputs:["Highest Score (acc.)"] },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ name:"501", time:120, inputs:["Darts für 501"] }</p>
+<p class="p1">];</p>
+<p class="p2"><br></p>
+<p class="p1">let seg = 0, time = 0, interval;</p>
+<p class="p2"><br></p>
+<p class="p1">function start(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("startBtn").classList.add("hidden");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>loadSegment();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function loadSegment(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(seg &gt;= segments.length){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("title").innerText = "Training beendet 🎯";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("timer").innerText = "00:00";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const s = segments[seg];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>time = s.time;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("title").innerText = s.name;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("inputs").innerHTML = "";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("nextBtn").classList.add("hidden");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>s.inputs.forEach(i=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("inputs").innerHTML +=</p>
+<p class="p1"><span class="Apple-converted-space">      </span>`&lt;input placeholder="${i}"&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>interval = setInterval(tick,1000);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function tick(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(time &lt;= 0){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearInterval(interval);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>pauseInput();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>time--;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>updateTimer();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function updateTimer(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const m = String(Math.floor(time/60)).padStart(2,"0");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const s = String(time%60).padStart(2,"0");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("timer").innerText = `${m}:${s}`;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function pauseInput(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let pause = 30;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("title").innerText += " – Eingabe (30s)";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("nextBtn").classList.remove("hidden");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>interval = setInterval(()=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>pause--;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById("timer").innerText = `Pause ${pause}s`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(pause&lt;=0){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>clearInterval(interval);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>next();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>},1000);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function next(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>clearInterval(interval);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>seg++;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>loadSegment();</p>
+<p class="p1">}</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
